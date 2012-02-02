@@ -41,14 +41,18 @@ class OpenStruct {
         unset($this->properties[$property]);
     }
 
-    function extend($classes) {
-        $classes = func_get_args();
+    function extend($class) {
+        $arguments = func_get_args();
+        $classes = (array) array_shift($arguments);
         foreach ($classes as $class) {
             if (!in_array($class, $this->ancestors)) {
                 $methods = get_class_methods($class);
                 foreach ($methods as $method) $this->extend_method($class, $method);
                 array_unshift($this->ancestors, $class);
-                if (method_exists($class, self::EXTENDED_METHOD)) call_user_func(array($class, self::EXTENDED_METHOD), $this);
+                if (method_exists($class, self::EXTENDED_METHOD)) {
+                    $extended_arguments = array_merge(array($this), $arguments);
+                    call_user_func_array(array($class, self::EXTENDED_METHOD), $extended_arguments);
+                }
             }
         }
         return $this;

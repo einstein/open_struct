@@ -4,8 +4,8 @@ namespace OpenStructTest {
     class AssetHelpers {
         static $extended_struct;
 
-        static function extended($struct) {
-            self::$extended_struct = $struct;
+        static function extended($struct, $value = 'test') {
+            self::$extended_struct = array($struct, $value);
         }
 
         function asset_path($path) {
@@ -105,26 +105,26 @@ namespace {
             }
 
             function test_extend_with_multiple_classes() {
-                $this->struct->extend($this->assets, $this->s3);
+                $this->struct->extend(array($this->assets, $this->s3));
                 assert_equal(array($this->s3, $this->assets), $this->struct->ancestors);
             }
 
             function test_extend_with_duplicate_classes() {
-                $this->struct->extend($this->assets, $this->s3, $this->assets);
-                assert_equal(array($this->s3, $this->assets), $this->struct->ancestors);
+                $this->struct->extend($this->assets)->extend($this->assets);
+                assert_equal(array($this->assets), $this->struct->ancestors);
             }
 
             function test_extend_should_call_extended_callback() {
                 $class = $this->assets;
                 assert_null($class::$extended_struct);
-                $this->struct->extend($class);
-                assert_equal($this->struct, $class::$extended_struct);
+                $this->struct->extend($class, 'TESTING');
+                assert_equal(array($this->struct, 'TESTING'), $class::$extended_struct);
             }
 
         // #method
 
             function test_method() {
-                $this->struct->extend($this->assets, $this->s3);
+                $this->struct->extend(array($this->assets, $this->s3));
                 assert_null($this->struct->method('missing'));
                 assert_equal(array($this->s3, 'bad_super'), $this->struct->method('bad_super'));
                 assert_equal(array($this->s3, 'asset_path'), $this->struct->method('asset_path'));
@@ -151,7 +151,7 @@ namespace {
             function test_super() {
                 $struct = $this->struct;
                 assert_throws('BadMethodCallException', function() use ($struct) { $struct->super(); });
-                $struct->extend($this->assets, $this->s3);
+                $struct->extend($this->assets)->extend($this->s3);
                 assert_equal('http://example.s3.amazonaws.com/assets/test.png', $struct->asset_path('test.png'));
                 assert_throws('BadMethodCallException', function() use ($struct) { $struct->bad_super(); });
             }

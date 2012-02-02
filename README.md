@@ -54,6 +54,11 @@ Methods can even be overridden (notice the call to `$this->super()` which refere
 
     print_r($helpers->ancestors);  # => array('S3AssetHelpers', 'AssetHelpers')
 
+Note that `super` can only be called from within a method:
+
+    $struct = new OpenStruct;
+    $struct->super();  # => BadMethodCallException - Undefined method OpenStruct::super()
+
 A wildcard/catch-all method `method_missing` can be defined as well (equivalent of PHP's `__call`)
 
     $person = new OpenStruct(array('name' => 'Bob'));
@@ -75,6 +80,38 @@ A wildcard/catch-all method `method_missing` can be defined as well (equivalent 
     $person->get_name();   # => 'Bob'
     $person->get_age();    # => BadMethodCallException - Undefined method OpenStruct::get_age()
     $person->undefined();  # => BadMethodCallException - Undefined method OpenStruct::undefined()
+
+If you `extend` a class that has a static method called `extended`, it will be called and
+passed the current `OpenStruct` instance and any additional parameters passed to `extend` as arguments.
+
+You can use it like a constructor/initializer:
+
+    class S3AssetHelpers {
+        static function extended($struct, $bucket = 'example') {
+            $struct->s3_bucket = $bucket;
+        }
+
+        function asset_path($path) {
+            return 'http://'.$this->s3_bucket.'.s3.amazonaws.com/'.$path;
+        }
+    }
+
+    $helpers = new OpenStruct;
+    $helpers->extend('S3AssetHelpers', 'test');
+
+    echo $helpers->asset_path('cat.png');  # => 'http://test.s3.amazonaws.com/cat.png'
+    echo $helpers->asset_path('dog.png');  # => 'http://test.s3.amazonaws.com/dog.png'
+
+The `extend` method also accepts an `array` of classes to extend as the first argument. These method calls all do the same thing:
+
+    $struct = new OpenStruct;
+
+    $struct->extend(array('AssetHelpers', 'S3AssetHelpers'));
+
+    $struct->extend('AssetHelpers');
+    $struct->extend('S3AssetHelpers');
+
+    $struct->extend('AssetHelpers')->extend('S3AssetHelpers');
 
 
 ## Testing
