@@ -38,7 +38,7 @@ An `OpenStruct` is a data structure that allows the definition of arbitrary meth
     echo $helpers->asset_path('cat.png');  # => '/assets/cat.png'
     echo $helpers->asset_path('dog.png');  # => '/assets/dog.png'
 
-Methods can even be overridden (notice the call to `$this->super`):
+Methods can even be overridden, continuing from the previous example (notice the call to `$this->super()` which references the example above):
 
     class S3AssetHelpers {
         function asset_path($path) {
