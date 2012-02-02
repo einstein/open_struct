@@ -24,7 +24,7 @@ An `OpenStruct` is a data structure that allows the definition of arbitrary meth
 
     print_r($person->properties);  # => array('name' => 'John', 'age' => 35)
 
-`OpenStruct` objects can `extend` classes allowing new methods to be defined at runtime (with correct `$this` reference):
+`OpenStruct` objects can `extend` classes allowing new methods to be defined at runtime (`$this` resolves correctly):
 
     class AssetHelpers {
         function asset_path($path) {
