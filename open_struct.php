@@ -44,24 +44,15 @@ class OpenStruct {
     function extend($class) {
         $arguments = func_get_args();
         $classes = (array) array_shift($arguments);
-        foreach ($classes as $class) {
-            if (!in_array($class, $this->ancestors)) {
-                $methods = get_class_methods($class);
-                foreach ($methods as $method) $this->extend_method($class, $method);
-                array_unshift($this->ancestors, $class);
-                if (method_exists($class, self::EXTENDED_METHOD)) {
-                    $extended_arguments = array_merge(array($this), $arguments);
-                    call_user_func_array(array($class, self::EXTENDED_METHOD), $extended_arguments);
-                }
-            }
-        }
+        foreach ($classes as $class) $this->extend_class($class, $arguments);
         return $this;
     }
 
     function method($method, $caller = null) {
         if (isset($this->methods[$method])) {
             $callees = $this->methods[$method];
-            $index = in_array($caller, $callees) ? array_search($caller, $callees) + 1 : 0;
+            $match = array_search($caller, $callees);
+            $index = $match === false ? 0 : $match + 1;
             if (isset($callees[$index])) return array($callees[$index], $method);
         }
     }
@@ -96,9 +87,25 @@ class OpenStruct {
         return $value;
     }
 
+    protected function extend_class($class, $arguments) {
+        if (!in_array($class, $this->ancestors)) {
+            $methods = get_class_methods($class);
+            foreach ($methods as $method) $this->extend_method($class, $method);
+            array_unshift($this->ancestors, $class);
+            $this->extended_callback($class, $arguments);
+        }
+    }
+
     protected function extend_method($class, $method) {
         if (!isset($this->methods[$method])) $this->methods[$method] = array();
         array_unshift($this->methods[$method], $class);
+    }
+
+    protected function extended_callback($class, $arguments) {
+        if (method_exists($class, self::EXTENDED_METHOD)) {
+            $extended_arguments = array_merge(array($this), $arguments);
+            call_user_func_array(array($class, self::EXTENDED_METHOD), $extended_arguments);
+        }
     }
 
     static function error_handler($number, $message, $file, $line, $context) {
