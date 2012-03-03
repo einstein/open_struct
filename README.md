@@ -1,6 +1,6 @@
 # OpenStruct
 
-An `OpenStruct` is a data structure that allows the definition of arbitrary methods and properties at runtime.
+An `OpenStruct` is a data structure that allows the definition of arbitrary methods and properties **at runtime**.
 
 ## Usage
 
