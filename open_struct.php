@@ -21,7 +21,7 @@ class OpenStruct {
         return $this->send($method, $arguments);
     }
 
-    function __get($property) {
+    function &__get($property) {
         return $this->properties[$property];
     }
 
