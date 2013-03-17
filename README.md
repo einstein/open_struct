@@ -81,11 +81,6 @@ A wildcard/catch-all method `method_missing` can be defined as well (equivalent 
     $person->get_age();    # => BadMethodCallException - Undefined method OpenStruct::get_age()
     $person->undefined();  # => BadMethodCallException - Undefined method OpenStruct::undefined()
 
-PHP has many [reserved keywords](http://php.net/manual/en/reserved.keywords.php) that throw fatal errors
-when you try to define them as methods e.g. `function eval() { }`. `OpenStruct` allows you to define methods
-with keyword names by prefixing them with `__` e.g. `function __eval() { }`. This allows you to call the `eval`
-method like `$struct->eval()` without throwing fatal errors.
-
 If you `extend` a class that has a static method called `extended`, it will be called and
 passed the current `OpenStruct` instance and any additional parameters passed to `extend` as arguments.
 
@@ -118,6 +113,16 @@ The `extend` method also accepts an `array` of classes to extend as the first ar
 
     $struct->extend('AssetHelpers')->extend('S3AssetHelpers');
 
+PHP has many [reserved keywords](http://php.net/manual/en/reserved.keywords.php) that throw fatal errors
+when you try to define them as methods e.g. `function include() { }`. `OpenStruct` allows you to define methods
+with keyword names by prefixing them with `__` e.g. `function __include() { }`. This allows you to call
+`$struct->include()` without throwing fatal errors.
+
+`OpenStruct` also includes an `eval` method which accepts a `$file` and optional array of `$locals`. It will
+[extract](http://php.net/extract) any locals and [include](http://www.php.net/manual/en/function.include.php)
+`$file` within the context of the `OpenStruct` instance. It also accepts an optional third argument `$extract_properties`
+which will also extract references to all of the `OpenStruct` instance's properties before including `$file`.
+`$extract_properties` defaults to `false`.
 
 ## Testing
 

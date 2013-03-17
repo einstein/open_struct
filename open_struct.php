@@ -1,6 +1,7 @@
 <?php
 
 class OpenStruct {
+    const EVAL_METHOD = '__eval';
     const EXTENDED_METHOD = 'extended';
     const INVOKE_METHOD = 'invoke';
     const MISSING_METHOD = 'method_missing';
@@ -15,10 +16,19 @@ class OpenStruct {
     function __construct($properties = array()) {
         $this->properties = $properties;
         $this->extend_method(__CLASS__, self::MISSING_METHOD);
+        $this->extend_method(__CLASS__, self::EVAL_METHOD);
     }
 
     function __call($method, $arguments) {
         return $this->send($method, $arguments);
+    }
+
+    function __eval($__file__, $__locals__ = array(), $extract_properties = false) {
+        ob_start();
+        if ($extract_properties) extract($this->properties, EXTR_REFS);
+        extract($__locals__);
+        include $__file__;
+        return ob_get_clean();
     }
 
     function &__get($property) {

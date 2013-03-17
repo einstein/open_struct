@@ -73,6 +73,13 @@ namespace {
                 assert_equal($properties, $struct->properties);
             }
 
+        // #__eval
+
+            function test_eval() {
+                $evaled = $this->struct->eval(__DIR__.'/../support/eval_test.php');
+                assert_equal(print_r($this->struct, true), $evaled);
+            }
+
         // #__get/__set
 
             function test_get_and_set() {
