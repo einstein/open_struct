@@ -81,6 +81,11 @@ A wildcard/catch-all method `method_missing` can be defined as well (equivalent 
     $person->get_age();    # => BadMethodCallException - Undefined method OpenStruct::get_age()
     $person->undefined();  # => BadMethodCallException - Undefined method OpenStruct::undefined()
 
+PHP has many [reserved keywords](http://php.net/manual/en/reserved.keywords.php) that throw fatal errors
+when you try to define them as methods e.g. `function eval() { }`. `OpenStruct` allows you to define methods
+with keyword names by prefixing them with `__` e.g. `function __eval() { }`. This allows you to call the `eval`
+method like `$struct->eval()` without throwing fatal errors.
+
 If you `extend` a class that has a static method called `extended`, it will be called and
 passed the current `OpenStruct` instance and any additional parameters passed to `extend` as arguments.
 

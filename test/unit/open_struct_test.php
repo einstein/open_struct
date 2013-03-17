@@ -32,6 +32,12 @@ namespace OpenStructTest {
             return 'test';
         }
     }
+
+    class KeywordHelpers {
+        function __keyword_method() {
+            return true;
+        }
+    }
 }
 
 namespace {
@@ -41,6 +47,7 @@ namespace {
             $this->struct = new OpenStruct;
             $this->assets = __CLASS__.'\\AssetHelpers';
             $this->s3 = __CLASS__.'\\S3AssetHelpers';
+            $this->keywords = __CLASS__.'\\KeywordHelpers';
             $class = $this->assets;
             $class::$extended_struct = null;
             $this->get_error_handler = (function() {
@@ -144,6 +151,11 @@ namespace {
                 $struct = $this->struct->extend($this->assets);
                 assert_equal('/assets/test.png', $this->struct->send('asset_path', array('test.png')));
                 assert_throws('BadMethodCallException', function() use ($struct) { $struct->send('missing'); });
+            }
+
+            function test_send_with_keyword_method() {
+                $struct = $this->struct->extend($this->keywords);
+                assert_equal(true, $this->struct->keyword_method());
             }
 
         // #super

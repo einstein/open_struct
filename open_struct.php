@@ -62,7 +62,7 @@ class OpenStruct {
     }
 
     function send($method, $arguments = array()) {
-        if (!$callee = $this->method($method)) {
+        if (!($callee = $this->method($method)) && !($callee = $this->method("__$method"))) {
             $callee = $this->method(self::MISSING_METHOD);
             $arguments = array($method, $arguments);
         }
