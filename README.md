@@ -2,6 +2,10 @@
 
 An `OpenStruct` is a data structure that allows the definition of arbitrary methods and properties **at runtime**.
 
+## Installation
+
+Clone it somewhere in your php `include_path` with `git clone git@github.com:einstein/open_struct.git` or install it with `composer` as `einstein/open_struct`.
+
 ## Usage
 
     require 'open_struct/open_struct.php';
