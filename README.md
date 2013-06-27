@@ -4,11 +4,14 @@ An `OpenStruct` is a data structure that allows the definition of arbitrary meth
 
 ## Installation
 
-Clone it somewhere in your php `include_path` with `git clone git@github.com:einstein/open_struct.git` or install it with `composer` as `einstein/open_struct`.
+If you're using `composer` simply add the `einstein/open-struct` dependency to your `packages.json` file.
+
+Otherwise you can manually install it by cloning the repository somewhere in your php `include_path`.
+
+    git clone git@github.com:einstein/open_struct.git`
+    require 'open_struct/open_struct.php';
 
 ## Usage
-
-    require 'open_struct/open_struct.php';
 
     $person = new OpenStruct;
     $person->name = 'John';
