@@ -1,0 +1,21 @@
+{
+  "name": "einstein/open_struct",
+  "type": "library",
+  "description": "Data structure that allows the definition of arbitrary methods and properties at runtime",
+  "keywords": ["mixins", "modules", "overloading", "struct", "traits"],
+  "homepage": "https://github.com/einstein/open_struct",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Sean Huber",
+      "email": "shuber@einsteinindustries.com",
+      "role": "Developer"
+    }
+  ],
+  "require": {
+    "php": ">= 5.3.0"
+  },
+  "autoload": {
+    "files": ["open_struct.php"]
+  }
+}
