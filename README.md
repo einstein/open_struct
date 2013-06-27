@@ -4,7 +4,7 @@ An `OpenStruct` is a data structure that allows the definition of arbitrary meth
 
 ## Installation
 
-If you're using `composer` simply add the `einstein/open-struct` dependency to your `packages.json` file.
+If you're using `composer` simply add the `einstein/open-struct` dependency to your `composer.json` file.
 
 Otherwise you can manually install it by cloning the repository somewhere in your php `include_path`.
 
