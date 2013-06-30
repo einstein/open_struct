@@ -68,7 +68,7 @@ class OpenStruct {
     }
 
     function method_missing($method, $arguments = array()) {
-        throw new \BadMethodCallException('Undefined method '.__CLASS__.'::'.$method.'() called with arguments '.print_r($arguments, true));
+        throw new \BadMethodCallException('Undefined method '.get_called_class().'::'.$method.'() called with arguments '.print_r($arguments, true));
     }
 
     function send($method, $arguments = array()) {
