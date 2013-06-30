@@ -131,7 +131,7 @@ class OpenStruct {
     static function unregister_error_handler() {
         if (self::$previous_error_handler) {
             $handler = self::$previous_error_handler;
-            unset(self::$previous_error_handler);
+            self::$previous_error_handler = null;
             return set_error_handler($handler);
         } else {
             return restore_error_handler();
